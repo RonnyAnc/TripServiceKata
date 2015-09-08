@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TripServiceKata.Exception;
+using TripServiceKata.User;
 
 namespace TripServiceKata.Trip
 {
@@ -8,11 +9,11 @@ namespace TripServiceKata.Trip
         public List<Trip> GetTripsByUser(User.User user)
         {
             List<Trip> tripList = new List<Trip>();
-            User.User loggedUser = UserSession.GetInstance().getLoggedUser();
+            User.User loggedUser = UserSession.GetInstance().GetLoggedUser();
             bool isFriend = false;
             if (loggedUser != null)
             {
-                foreach(User.User friend in user.GetFriends())
+                foreach (User.User friend in user.GetFriends())
                 {
                     if (friend.Equals(loggedUser))
                     {
