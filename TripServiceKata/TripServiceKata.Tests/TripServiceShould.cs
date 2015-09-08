@@ -24,14 +24,17 @@ namespace TripServiceKata.Tests
         [ExpectedException(typeof(UserNotLoggedInException))]
         public static void throw_an_exception_when_no_logged_user()
         {
-            var service = new TestableTripService(null);
+            var loggedUserService = Substitute.For<LoggedUserService>();
+            var service = new TripService(loggedUserService);
             service.GetTripsByUser(AnyUser);
         }
 
         [Test]
         public static void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
         {
-            var service = new TestableTripService(LoggedUser);
+            var loggedUserService = Substitute.For<LoggedUserService>();
+            loggedUserService.GetUser().Returns(LoggedUser);
+            var service = new TripService(loggedUserService);
             var trips = service.GetTripsByUser(AnyUser);
             trips.Should().BeEmpty();
         }
