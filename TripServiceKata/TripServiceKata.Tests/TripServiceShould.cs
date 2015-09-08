@@ -39,10 +39,15 @@ namespace TripServiceKata.Tests
 
         private class WhenThereIsLoggedUser : TripServiceShould
         {
+            [SetUp]
+            public void Stub()
+            {
+                loggedUserService.GetUser().Returns(loggedUser);
+            }
+
             [Test]
             public void and_he_is_not_friend_of_required_user_get_an_empty_list()
             {
-                loggedUserService.GetUser().Returns(loggedUser);
                 var service = new TripService(loggedUserService, tripRepo);
                 var trips = service.GetTripsByUser(anyUser);
                 trips.Should().BeEmpty();
@@ -51,9 +56,7 @@ namespace TripServiceKata.Tests
             [Test]
             public void and_he_is_friend_of_required_user_get_his_trips()
             {
-
                 tripRepo.FindTripsByUser(anyUser).Returns(new List<Trip.Trip> { new Trip.Trip() });
-                loggedUserService.GetUser().Returns(loggedUser);
                 anyUser.AddFriend(loggedUser);
                 var service = new TripService(loggedUserService, tripRepo);
 
