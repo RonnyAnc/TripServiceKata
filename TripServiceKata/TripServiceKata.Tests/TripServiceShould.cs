@@ -55,37 +55,5 @@ namespace TripServiceKata.Tests
 
             trips.Count.Should().Be(1);
         }
-
-        [Test]
-        public void extracting_TripRepository_collaboration()
-        {
-            var tripRepo = Substitute.For<TripRepository>();
-            tripRepo.FindTripsByUser(AnyUser).Returns(new List<Trip.Trip> { new Trip.Trip() });
-            var loggedUserService = Substitute.For<LoggedUserService>();
-            loggedUserService.GetUser().Returns(LoggedUser);
-            AnyUser.AddFriend(LoggedUser);
-            var service = new TripService(loggedUserService, tripRepo);
-
-            var trips = service.GetTripsByUser(AnyUser);
-
-            trips.Should().HaveCount(1);
-        }
-
-        private class TestableTripService : TripService
-        {
-            public TestableTripService(LoggedUserService loggedUserService) : base(loggedUserService)
-            {
-            }
-
-            protected override User.User GetLoggedUser()
-            {
-                return LoggedUserService.GetUser();
-            }
-
-            protected override List<Trip.Trip> FindTripsByUser(User.User user)
-            {
-                return user.Trips();
-            }
-        }
     }
 }
