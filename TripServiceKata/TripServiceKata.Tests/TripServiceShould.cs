@@ -4,17 +4,17 @@ using NSubstitute;
 using NUnit.Framework;
 using TripServiceKata.Exception;
 using TripServiceKata.Trip;
-using TripServiceKata.User;
 
 namespace TripServiceKata.Tests
 {
     [TestFixture]
     public class TripServiceShould
     {
-        private static readonly User.User LoggedUser;
-        private static readonly User.User AnyUser;
+        private User.User LoggedUser;
+        private User.User AnyUser;
 
-        static TripServiceShould()
+        [SetUp]
+        public void SetUp()
         {
             LoggedUser = new User.User();
             AnyUser = new User.User();
@@ -22,7 +22,7 @@ namespace TripServiceKata.Tests
 
         [Test]
         [ExpectedException(typeof(UserNotLoggedInException))]
-        public static void throw_an_exception_when_no_logged_user()
+        public void throw_an_exception_when_no_logged_user()
         {
             var loggedUserService = Substitute.For<LoggedUserService>();
             var service = new TripService(loggedUserService);
@@ -30,7 +30,7 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public static void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
+        public void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
         {
             var loggedUserService = Substitute.For<LoggedUserService>();
             loggedUserService.GetUser().Returns(LoggedUser);
@@ -40,7 +40,7 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public static void get_trips_of_required_user_when_logged_user_is_his_friend()
+        public void get_trips_of_required_user_when_logged_user_is_his_friend()
         {
             var loggedUserService = Substitute.For<LoggedUserService>();
             loggedUserService.GetUser().Returns(LoggedUser);
