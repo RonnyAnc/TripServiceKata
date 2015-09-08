@@ -18,7 +18,7 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public static void get_an_empty_list_when_logged_user_is_not_friend_of_passed_user()
+        public static void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
         {
             var loggedUser = new User.User();
             var service = new TestableTripService(loggedUser);
