@@ -6,11 +6,11 @@ namespace TripServiceKata.Trip
 {
     public class TripService
     {
-        private readonly LoggedUserService loggedUserService;
+        protected readonly LoggedUserService LoggedUserService;
 
         public TripService(LoggedUserService loggedUserService)
         {
-            this.loggedUserService = loggedUserService;
+            this.LoggedUserService = loggedUserService;
         }
 
         protected TripService()
@@ -51,7 +51,7 @@ namespace TripServiceKata.Trip
 
         protected virtual User.User GetLoggedUser()
         {
-            return loggedUserService.GetUser();
+            return LoggedUserService.GetUser();
         }
     }
 }

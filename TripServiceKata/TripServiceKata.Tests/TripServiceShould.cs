@@ -42,9 +42,11 @@ namespace TripServiceKata.Tests
         [Test]
         public static void get_trips_of_required_user_when_logged_user_is_his_friend()
         {
+            var loggedUserService = Substitute.For<LoggedUserService>();
+            loggedUserService.GetUser().Returns(LoggedUser);
             AnyUser.AddFriend(LoggedUser);
             AnyUser.AddTrip(new Trip.Trip());
-            var service = new TestableTripService(LoggedUser);
+            var service = new TestableTripService(loggedUserService);
 
             var trips = service.GetTripsByUser(AnyUser);
 
@@ -65,6 +67,10 @@ namespace TripServiceKata.Tests
         {
             private User.User loggedUser;
 
+            public TestableTripService(LoggedUserService loggedUserService) : base(loggedUserService)
+            {
+            }
+
             public TestableTripService(User.User loggedUser)
             {
                 this.loggedUser = loggedUser;
@@ -72,7 +78,7 @@ namespace TripServiceKata.Tests
 
             protected override User.User GetLoggedUser()
             {
-                return loggedUser;
+                return LoggedUserService.GetUser();
             }
 
             protected override List<Trip.Trip> FindTripsByUser(User.User user)
