@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 using TripServiceKata.Exception;
 using TripServiceKata.Trip;
@@ -26,6 +27,20 @@ namespace TripServiceKata.Tests
             trips.Should().BeEmpty();
         }
 
+        [Test]
+        public static void get_trips_of_required_user_when_logged_user_is_his_friend()
+        {
+            var loggedUser = new User.User();
+            var anyUser = new User.User();
+            anyUser.AddFriend(loggedUser);
+            anyUser.AddTrip(new Trip.Trip());
+            var service = new TestableTripService(loggedUser);
+
+            var trips = service.GetTripsByUser(anyUser);
+
+            trips.Count.Should().Be(1);
+        }
+
         private class TestableTripService : TripService
         {
             private User.User loggedUser;
@@ -38,6 +53,11 @@ namespace TripServiceKata.Tests
             protected override User.User GetLoggedUser()
             {
                 return loggedUser;
+            }
+
+            protected override List<Trip.Trip> FindTripsByUser(User.User user)
+            {
+                return user.Trips();
             }
         }
     }
