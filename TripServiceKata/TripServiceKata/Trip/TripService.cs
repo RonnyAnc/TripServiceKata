@@ -7,6 +7,7 @@ namespace TripServiceKata.Trip
     public class TripService
     {
         protected readonly LoggedUserService LoggedUserService;
+        private readonly TripRepository tripRepository;
 
         public TripService(LoggedUserService loggedUserService)
         {
@@ -15,6 +16,12 @@ namespace TripServiceKata.Trip
 
         protected TripService()
         {
+        }
+
+        public TripService(LoggedUserService loggedUserService, TripRepository tripRepository)
+        {
+            LoggedUserService = loggedUserService;
+            this.tripRepository = tripRepository;
         }
 
         public List<Trip> GetTripsByUser(User.User user)
@@ -46,7 +53,7 @@ namespace TripServiceKata.Trip
 
         protected virtual List<Trip> FindTripsByUser(User.User user)
         {
-            return TripDAO.FindTripsByUser(user);
+            return tripRepository.FindTripsByUser(user);
         }
 
         protected virtual User.User GetLoggedUser()

@@ -25,7 +25,8 @@ namespace TripServiceKata.Tests
         public void throw_an_exception_when_no_logged_user()
         {
             var loggedUserService = Substitute.For<LoggedUserService>();
-            var service = new TripService(loggedUserService);
+            var tripRepo = Substitute.For<TripRepository>();
+            var service = new TripService(loggedUserService, tripRepo);
             service.GetTripsByUser(AnyUser);
         }
 
@@ -34,7 +35,8 @@ namespace TripServiceKata.Tests
         {
             var loggedUserService = Substitute.For<LoggedUserService>();
             loggedUserService.GetUser().Returns(LoggedUser);
-            var service = new TripService(loggedUserService);
+            var tripRepo = Substitute.For<TripRepository>();
+            var service = new TripService(loggedUserService, tripRepo);
             var trips = service.GetTripsByUser(AnyUser);
             trips.Should().BeEmpty();
         }
@@ -42,11 +44,12 @@ namespace TripServiceKata.Tests
         [Test]
         public void get_trips_of_required_user_when_logged_user_is_his_friend()
         {
+            var tripRepo = Substitute.For<TripRepository>();
+            tripRepo.FindTripsByUser(AnyUser).Returns(new List<Trip.Trip> {new Trip.Trip()});
             var loggedUserService = Substitute.For<LoggedUserService>();
             loggedUserService.GetUser().Returns(LoggedUser);
             AnyUser.AddFriend(LoggedUser);
-            AnyUser.AddTrip(new Trip.Trip());
-            var service = new TestableTripService(loggedUserService);
+            var service = new TripService(loggedUserService, tripRepo);
 
             var trips = service.GetTripsByUser(AnyUser);
 
@@ -54,13 +57,18 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public static void extracting_LoggedUserService_collaboration()
+        public void extracting_TripRepository_collaboration()
         {
+            var tripRepo = Substitute.For<TripRepository>();
+            tripRepo.FindTripsByUser(AnyUser).Returns(new List<Trip.Trip> { new Trip.Trip() });
             var loggedUserService = Substitute.For<LoggedUserService>();
             loggedUserService.GetUser().Returns(LoggedUser);
-            var service = new TripService(loggedUserService);
+            AnyUser.AddFriend(LoggedUser);
+            var service = new TripService(loggedUserService, tripRepo);
+
             var trips = service.GetTripsByUser(AnyUser);
-            trips.Should().BeEmpty();
+
+            trips.Should().HaveCount(1);
         }
 
         private class TestableTripService : TripService
