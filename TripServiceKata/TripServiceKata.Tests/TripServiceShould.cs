@@ -32,6 +32,7 @@ namespace TripServiceKata.Tests
             [ExpectedException(typeof(UserNotLoggedInException))]
             public void throw_an_exception()
             {
+                loggedUserService.GetUser().Returns((User.User) null);
                 var service = new TripService(loggedUserService, tripRepo);
                 service.GetTripsByUser(anyUser);
             }
