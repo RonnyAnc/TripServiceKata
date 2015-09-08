@@ -10,6 +10,13 @@ namespace TripServiceKata.Tests
     [TestFixture]
     public class TripServiceShould
     {
+        private static readonly User.User LoggedUser;
+
+        static TripServiceShould()
+        {
+            LoggedUser = new User.User();
+        }
+
         [Test]
         [ExpectedException(typeof(UserNotLoggedInException))]
         public static void throw_an_exception_when_no_logged_user()
@@ -21,8 +28,7 @@ namespace TripServiceKata.Tests
         [Test]
         public static void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
         {
-            var loggedUser = new User.User();
-            var service = new TestableTripService(loggedUser);
+            var service = new TestableTripService(LoggedUser);
             var trips = service.GetTripsByUser(new User.User());
             trips.Should().BeEmpty();
         }
@@ -30,11 +36,10 @@ namespace TripServiceKata.Tests
         [Test]
         public static void get_trips_of_required_user_when_logged_user_is_his_friend()
         {
-            var loggedUser = new User.User();
             var anyUser = new User.User();
-            anyUser.AddFriend(loggedUser);
+            anyUser.AddFriend(LoggedUser);
             anyUser.AddTrip(new Trip.Trip());
-            var service = new TestableTripService(loggedUser);
+            var service = new TestableTripService(LoggedUser);
 
             var trips = service.GetTripsByUser(anyUser);
 
