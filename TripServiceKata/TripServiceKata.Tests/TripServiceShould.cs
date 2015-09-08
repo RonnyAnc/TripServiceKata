@@ -38,7 +38,8 @@ namespace TripServiceKata.Tests
             }
         }
 
-        private class WhenThereIsLoggedUser : TripServiceShould
+        [TestFixture]
+        public class WhenThereIsLoggedUser : TripServiceShould
         {
             [SetUp]
             public void Stub()
