@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NSubstitute;
 using NUnit.Framework;
 using TripServiceKata.Exception;
 using TripServiceKata.Trip;
@@ -45,6 +46,16 @@ namespace TripServiceKata.Tests
             var trips = service.GetTripsByUser(AnyUser);
 
             trips.Count.Should().Be(1);
+        }
+
+        [Test]
+        public static void extracting_LoggedUserService_collaboration()
+        {
+            var loggedUserService = Substitute.For<LoggedUserService>();
+            loggedUserService.GetUser().Returns(LoggedUser);
+            var service = new TripService(loggedUserService);
+            var trips = service.GetTripsByUser(AnyUser);
+            trips.Should().BeEmpty();
         }
 
         private class TestableTripService : TripService
