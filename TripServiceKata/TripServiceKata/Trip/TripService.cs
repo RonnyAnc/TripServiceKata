@@ -17,16 +17,11 @@ namespace TripServiceKata.Trip
 
         public List<Trip> GetTripsByUser(User.User user)
         {
-            User.User loggedUser = GetLoggedUser();
+            var loggedUser = GetLoggedUser();
             if (loggedUser != null)
             {
-                foreach(User.User friend in user.GetFriends())
-                {
-                    if (friend.Equals(loggedUser))
-                    {
-                        return FindTripsByUser(user);
-                    }
-                }
+                if (user.HasFriend(loggedUser))
+                    return FindTripsByUser(user);
                 return new List<Trip>();
             }
             else
