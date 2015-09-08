@@ -24,10 +24,7 @@ namespace TripServiceKata.Trip
                     return tripRepository.FindTripsByUser(user);
                 return new List<Trip>();
             }
-            else
-            {
-                throw new UserNotLoggedInException();
-            }
+            throw new UserNotLoggedInException();
         }
     }
 }
