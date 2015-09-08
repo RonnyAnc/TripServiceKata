@@ -65,15 +65,8 @@ namespace TripServiceKata.Tests
 
         private class TestableTripService : TripService
         {
-            private User.User loggedUser;
-
             public TestableTripService(LoggedUserService loggedUserService) : base(loggedUserService)
             {
-            }
-
-            public TestableTripService(User.User loggedUser)
-            {
-                this.loggedUser = loggedUser;
             }
 
             protected override User.User GetLoggedUser()
