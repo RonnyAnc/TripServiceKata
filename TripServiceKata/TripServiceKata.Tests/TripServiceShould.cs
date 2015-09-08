@@ -11,11 +11,12 @@ namespace TripServiceKata.Tests
     public class TripServiceShould
     {
         private static readonly User.User LoggedUser;
-        private static readonly User.User AnyUser = new User.User();
+        private static readonly User.User AnyUser;
 
         static TripServiceShould()
         {
             LoggedUser = new User.User();
+            AnyUser = new User.User();
         }
 
         [Test]
