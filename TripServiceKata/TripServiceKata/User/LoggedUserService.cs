@@ -1,10 +1,8 @@
-using TripServiceKata.User;
-
-namespace TripServiceKata
+namespace TripServiceKata.User
 {
     public class LoggedUserService
     {
-        public virtual User.User GetUser()
+        public virtual User GetUser()
         {
             return UserSession.GetInstance().GetLoggedUser();
         }
