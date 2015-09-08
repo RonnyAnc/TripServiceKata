@@ -18,13 +18,11 @@ namespace TripServiceKata.Trip
         public List<Trip> GetTripsByUser(User.User user)
         {
             var loggedUser = loggedUserService.GetUser();
-            if (loggedUser != null)
-            {
-                if (user.HasFriend(loggedUser))
-                    return tripRepository.FindTripsByUser(user);
-                return new List<Trip>();
-            }
-            throw new UserNotLoggedInException();
+            if (loggedUser == null) throw new UserNotLoggedInException();
+
+            if (user.HasFriend(loggedUser))
+                return tripRepository.FindTripsByUser(user);
+            return new List<Trip>();
         }
     }
 }
