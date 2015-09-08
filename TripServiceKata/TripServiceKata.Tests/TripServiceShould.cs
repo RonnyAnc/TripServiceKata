@@ -25,35 +25,42 @@ namespace TripServiceKata.Tests
             tripRepo = Substitute.For<TripRepository>();
         }
 
-        [Test]
-        [ExpectedException(typeof(UserNotLoggedInException))]
-        public void throw_an_exception_when_no_logged_user()
+        [TestFixture]
+        private class WhenNoLoggedUser : TripServiceShould
         {
-            var service = new TripService(loggedUserService, tripRepo);
-            service.GetTripsByUser(anyUser);
+            [Test]
+            [ExpectedException(typeof(UserNotLoggedInException))]
+            public void throw_an_exception()
+            {
+                var service = new TripService(loggedUserService, tripRepo);
+                service.GetTripsByUser(anyUser);
+            }
         }
 
-        [Test]
-        public void get_an_empty_list_when_logged_user_is_not_friend_of_required_user()
+        private class WhenThereIsLoggedUser : TripServiceShould
         {
-            loggedUserService.GetUser().Returns(loggedUser);
-            var service = new TripService(loggedUserService, tripRepo);
-            var trips = service.GetTripsByUser(anyUser);
-            trips.Should().BeEmpty();
-        }
+            [Test]
+            public void and_he_is_not_friend_of_required_user_get_an_empty_list()
+            {
+                loggedUserService.GetUser().Returns(loggedUser);
+                var service = new TripService(loggedUserService, tripRepo);
+                var trips = service.GetTripsByUser(anyUser);
+                trips.Should().BeEmpty();
+            }
 
-        [Test]
-        public void get_trips_of_required_user_when_logged_user_is_his_friend()
-        {
-            
-            tripRepo.FindTripsByUser(anyUser).Returns(new List<Trip.Trip> {new Trip.Trip()});
-            loggedUserService.GetUser().Returns(loggedUser);
-            anyUser.AddFriend(loggedUser);
-            var service = new TripService(loggedUserService, tripRepo);
+            [Test]
+            public void and_he_is_friend_of_required_user_get_his_trips()
+            {
 
-            var trips = service.GetTripsByUser(anyUser);
+                tripRepo.FindTripsByUser(anyUser).Returns(new List<Trip.Trip> { new Trip.Trip() });
+                loggedUserService.GetUser().Returns(loggedUser);
+                anyUser.AddFriend(loggedUser);
+                var service = new TripService(loggedUserService, tripRepo);
 
-            trips.Count.Should().Be(1);
+                var trips = service.GetTripsByUser(anyUser);
+
+                trips.Count.Should().Be(1);
+            }
         }
     }
 }
