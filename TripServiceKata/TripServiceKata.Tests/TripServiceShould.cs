@@ -32,7 +32,7 @@ namespace TripServiceKata.Tests
             [ExpectedException(typeof(UserNotLoggedInException))]
             public void throw_an_exception()
             {
-                loggedUserService.GetUser().Returns((User.User) null);
+                loggedUserService.GetUser().Returns(new UserSearchResult(null));
                 var service = new TripService(loggedUserService, tripRepo);
                 service.GetTripsByUser(anyUser);
             }
@@ -44,7 +44,7 @@ namespace TripServiceKata.Tests
             [SetUp]
             public void Stub()
             {
-                loggedUserService.GetUser().Returns(loggedUser);
+                loggedUserService.GetUser().Returns(new UserSearchResult(loggedUser));
             }
 
             [Test]

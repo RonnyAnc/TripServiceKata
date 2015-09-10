@@ -1,10 +1,14 @@
+using TripServiceKata.Exception;
+
 namespace TripServiceKata.User
 {
     public class LoggedUserService
     {
-        public virtual User GetUser()
+        public virtual UserSearchResult GetUser()
         {
-            return UserSession.GetInstance().GetLoggedUser();
+            var possibleUser = UserSession.GetInstance().GetLoggedUser();
+            return new UserSearchResult(possibleUser);
         }
     }
+
 }
