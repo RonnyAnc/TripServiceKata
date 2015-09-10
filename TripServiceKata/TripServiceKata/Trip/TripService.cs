@@ -6,18 +6,18 @@ namespace TripServiceKata.Trip
 {
     public class TripService
     {
-        private readonly LoggedUserService loggedUserService;
+        private readonly SessionService sessionService;
         private readonly TripRepository tripRepository;
 
-        public TripService(LoggedUserService loggedUserService, TripRepository tripRepository)
+        public TripService(SessionService sessionService, TripRepository tripRepository)
         {
-            this.loggedUserService = loggedUserService;
+            this.sessionService = sessionService;
             this.tripRepository = tripRepository;
         }
 
         public List<Trip> GetTripsByUser(User.User user)
         {
-            var userSearchResult = loggedUserService.GetUser();
+            var userSearchResult = sessionService.GetUser();
             if (userSearchResult.HasNotUser()) throw new UserNotLoggedInException();
 
             return user.HasFriend(userSearchResult.User()) ? tripRepository.FindTripsByUser(user) : new List<Trip>();

@@ -2,7 +2,7 @@ using TripServiceKata.Exception;
 
 namespace TripServiceKata.User
 {
-    public class LoggedUserService
+    public class SessionService
     {
         public virtual UserSearchResult GetUser()
         {
