@@ -20,7 +20,7 @@ namespace TripServiceKata.Trip
             var userSearchResult = sessionService.GetLoggedUser();
             if (userSearchResult.HasNotUser()) throw new UserNotLoggedInException();
 
-            return user.HasFriend(userSearchResult.User()) ? tripRepository.FindTripsByUser(user) : new List<Trip>();
+            return user.IsFriendOf(userSearchResult.User()) ? tripRepository.FindTripsByUser(user) : new List<Trip>();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace TripServiceKata.User
             return trips;
         }
 
-        public bool HasFriend(User user)
+        public bool IsFriendOf(User user)
         {
             return friends.Contains(user);
         }
