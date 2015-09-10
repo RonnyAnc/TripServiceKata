@@ -4,7 +4,7 @@ namespace TripServiceKata.User
 {
     public class SessionService
     {
-        public virtual UserSearchResult GetUser()
+        public virtual UserSearchResult GetLoggedUser()
         {
             var possibleUser = UserSession.GetInstance().GetLoggedUser();
             return new UserSearchResult(possibleUser);
